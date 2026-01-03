@@ -19,6 +19,10 @@ tdd: ## Run test watcher
 dev: ## Run the development server
 ```
 
+Only use `.PHONY` when needed to save lines, and place it above the target.
+
+Makefiles should be portable between OSX and Linux.
+
 ## .github
 
 ### .github/workflows/ci.yaml
