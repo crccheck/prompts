@@ -75,5 +75,6 @@ Use Mypy for type checking. The only rule to enable should be:
 
 ```
 [tool.mypy]
+ignore_missing_imports = true
 warn_unused_ignores = true
 ```
