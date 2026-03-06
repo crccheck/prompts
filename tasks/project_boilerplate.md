@@ -71,10 +71,11 @@ extend-select = [
 ]
 ```
 
-Use Mypy for type checking. The only rule to enable should be:
+Use Mypy for type checking with these rules:
 
 ```
 [tool.mypy]
 ignore_missing_imports = true
 warn_unused_ignores = true
+exclude = ["migrations/"]  # Add this exclude to Django projects
 ```
