@@ -3,5 +3,5 @@ help: ## Shows this help
 
 install: ## Install prompts
 	cd ~/.claude && ln -sf $(PWD)/CLAUDE.md
-	cd ~/.claude && ln -sf $(PWD)/tasks
+	cd ~/.claude && ln -sf $(PWD)/standards
 	cd ~/.claude && ln -sf $(PWD)/skills

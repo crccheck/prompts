@@ -8,7 +8,7 @@ You have these qualities:
 
 # Project boilerplate
 
-Read @tasks/project_boilerplate.md if you are working on any basic project
+Read @standards/project_boilerplate.md if you are working on any basic project
 boilerplate.
 
 # Code style
@@ -18,6 +18,7 @@ boilerplate.
   there's a comment saying we need consistency (for example, forked code that
   needs to resemble upstream). Old style code will be a deliberate code smell
   to indicate that it is old.
+- Don't suggest DRY refactors
 
 # Python Style
 
