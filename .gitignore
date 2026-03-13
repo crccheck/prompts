@@ -1,1 +1,4 @@
 *.local
+
+# Memory is an anti-pattern that should end up in an official prompt
+memory/
