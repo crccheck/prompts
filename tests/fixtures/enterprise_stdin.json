@@ -1,0 +1,22 @@
+{
+  "model": {
+    "display_name": "Claude Sonnet 4.6"
+  },
+  "session_name": "my-project",
+  "cwd": "/Users/user/projects/my-project",
+  "rate_limits": {
+    "five_hour": null,
+    "seven_day": null
+  },
+  "cost": {
+    "total_cost_usd": 1.2739
+  },
+  "context_window": {
+    "context_window_size": 200000,
+    "current_usage": {
+      "input_tokens": 21500,
+      "cache_creation_input_tokens": 8200,
+      "cache_read_input_tokens": 13800
+    }
+  }
+}

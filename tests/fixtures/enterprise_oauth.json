@@ -1,0 +1,17 @@
+{
+  "claudeAiOauth": {
+    "accessToken": "sk-ant-oat01-not-relevant",
+    "refreshToken": "sk-ant-ort01-not-relevant",
+    "expiresAt": 1777662761086,
+    "scopes": [
+      "user:file_upload",
+      "user:inference",
+      "user:mcp_servers",
+      "user:profile",
+      "user:sessions:claude_code"
+    ],
+    "subscriptionType": "team",
+    "rateLimitTier": "default_claude_max_5x"
+  },
+  "organizationUuid": "not-relevant"
+}
