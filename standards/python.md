@@ -20,6 +20,9 @@ Do not attempt to remove imports. 'ruff' will fix them later.
 Use dependency groups for 'dev' dependencies, not 'project.optional-dependencies'
 
 ```
+[tool.uv]
+exclude-newer = "7 days"
+
 [dependency-groups]
 dev = [...]
 ```
