@@ -4,7 +4,7 @@
 
 set -f
 
-input=$(cat)
+input=$(cat | tr -d '\r')
 [ -z "$input" ] && { printf "Claude"; exit 0; }
 
 blue='\033[38;2;0;153;255m'
@@ -41,6 +41,7 @@ get_oauth_token() {
 {
     read -r model_name
     read -r session_name
+    read -r session_id
     read -r cwd
     read -r five_hour_pct
     read -r five_hour_reset
@@ -48,12 +49,11 @@ get_oauth_token() {
     read -r seven_day_reset
     read -r cost_usd
     read -r size
-    read -r input_tokens
-    read -r cache_create
-    read -r cache_read
+    read -r current
 } < <(echo "$input" | jq -r '
     .model.display_name // "Claude",
     .session_name // "",
+    .session_id // "",
     .cwd // "",
     .rate_limits.five_hour.used_percentage,
     .rate_limits.five_hour.resets_at,
@@ -61,13 +61,10 @@ get_oauth_token() {
     .rate_limits.seven_day.resets_at,
     .cost.total_cost_usd,
     .context_window.context_window_size // 200000,
-    .context_window.current_usage.input_tokens // 0,
-    .context_window.current_usage.cache_creation_input_tokens // 0,
-    .context_window.current_usage.cache_read_input_tokens // 0
-')
+    .context_window.total_input_tokens // 0
+' | tr -d '\r')
 
 [ "$size" -eq 0 ] 2>/dev/null && size=200000
-current=$(( input_tokens + cache_create + cache_read ))
 
 git_branch=""
 if [ -n "$cwd" ]; then
@@ -148,6 +145,13 @@ fi
 if [ -n "$session_name" ]; then
     [ -n "$line2" ] && line2+="$sep"
     line2+="${dim}${session_name}${reset}"
+fi
+if [ -n "$session_id" ]; then
+  _fc=$(cat "/tmp/claude/fuck_count_${session_id}" 2>/dev/null)
+  if [ -n "$_fc" ] && [ "$_fc" -gt 0 ] 2>/dev/null; then
+    [ -n "$line2" ] && line2+="$sep"
+    line2+="${dim}fucks: ${reset}${cyan}${_fc}${reset}"
+  fi
 fi
 if [ -n "$git_branch" ] && [ "$git_branch" != "$session_name" ]; then
     [ -n "$line2" ] && line2+="$sep"
