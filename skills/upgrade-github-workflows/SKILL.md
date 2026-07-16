@@ -13,6 +13,7 @@ Check and upgrade GitHub Actions in `.github/workflows/` to their latest version
    - For all other actions: Check releases page (should already have comment links)
 
 4. Report findings in a table format:
+
    ```
    | Action | Current | Latest | Status |
    |--------|---------|--------|--------|
