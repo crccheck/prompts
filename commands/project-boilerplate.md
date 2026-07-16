@@ -1,3 +1,7 @@
+---
+description: Set up or update standard project boilerplate (Makefile, .github/workflows, dependabot)
+---
+
 Here are some common files at the project root. They may not be all relevant.
 
 ## Makefile

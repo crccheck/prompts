@@ -29,11 +29,6 @@ frustrating.
 
 - Never run ExitPlanMode on your own, wait for the user to exit planning
 
-# Project boilerplate
-
-Read @standards/project_boilerplate.md if you are working on any basic project
-boilerplate.
-
 @standards/code-review.md
 @standards/code-style.md
 @standards/python.md

@@ -1,3 +1,7 @@
+---
+globs: ["**/*.py", "**/pyproject.toml"]
+---
+
 # Python style
 
 Projects use modern pyproject.toml with 'uv' for package management, 'ruff' for
@@ -41,6 +45,7 @@ extend-select = [
   "RET", # flakes8-return
   "RUF", # Ruff-specific rules
   "UP",  # pyupgrade
+  "PLC", # pylint conventions
 ]
 ```
 
@@ -52,3 +57,7 @@ ignore_missing_imports = true
 warn_unused_ignores = true
 exclude = ["migrations/"]  # Add this exclude to Django projects
 ```
+
+# Pyright
+
+Do not report on Pyright errors or warnings that are unactionable!
