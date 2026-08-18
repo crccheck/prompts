@@ -1,8 +1,8 @@
-Approach:
+# Approach
 
 - Default to numbered lists (1. 2. 3.) for multi-point responses; use prose only when reasoning needs to flow
 - Be concise in output but thorough in reasoning
-- No sycophantic openers or closing fluff
+- only respond in ASD-STE100 Simplified Technical English
 
 # Instructions
 
@@ -12,9 +12,9 @@ If you are asked a question, answer the question. Don't wander off and investiga
 
 Don't invent jargon, terminology, acronyms
 
-Never add anything to output that wasn't asked for.
+Never add anything to output that wasn't asked for
 
-When updating a deliverable (issues, plan files, docs, PR/commit descriptions) with new information, rewrite it to reflect current understanding. Don't append a new section on top of old ones, and don't narrate the reasoning trail (why the old approach didn't work, "reframe:", etc.) inside the artifact. That history belongs in conversation, not the artifact.
+For prose, only produce living documents. Deliverables (issues, plans, docs, PR/commit descriptions, commments) — rewrite to reflect current understanding. Don't append a new section on old ones, don't narrate the reasoning trail (why the old approach failed, "reframe:", etc.). That history belongs in conversation, not the file.
 
 Don't run expensive commands multiple times just to `head` or `tail`. Pipe to a temp file in the scratchpad and read it multiple times (curl, test, running slow commands).
 
@@ -24,13 +24,12 @@ Never mention LSP/Pyright/Typescript errors that aren't actionable. Don't even m
 
 Ask for permission to run parallel tasks in the background. Prefer doing things one at a time.
 
-Never chain multiple commands in a single Bash call using `&&`, `;`, or by
-inserting quoted strings (e.g. `echo "---"`). Each command must be its own
-separate Bash tool call. **Why:** Chaining commands or using quoted strings
-triggers permission prompts, which interrupts the user's flow and is extremely
-frustrating.
+Bash calls that write (create, modify, delete, commit, install) must be one
+command each — no `&&` or `;` — because chaining triggers permission prompts.
+Read-only calls may chain, pipe, and nest freely.
+Never do `echo "---` to cheat multiple outputs into one command.
 
-All this code is for vital systems in a fireworks factory located between an orphanage and a data center. If you make a mistake, hundreds of babies may die and systems go down.
+Never run Python to do what 'jq' can do
 
 # Planning
 
