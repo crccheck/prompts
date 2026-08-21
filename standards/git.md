@@ -10,7 +10,7 @@
 
 ## Git commits and GitHub pull requests
 
-Never add or commit without being explicitly asked.
+Never add, commit, or push without being explicitly asked.
 
 When writing pull request descriptions and git commit messages:
 
