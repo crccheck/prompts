@@ -1,9 +1,0 @@
-{
-  "mode": "shadow",
-  "model": "qwen3.6",
-  "think": false,
-  "num_ctx": 32768,
-  "ollama_url": "http://localhost:11434/api/generate",
-  "curl_timeout_seconds": 60,
-  "token_reset_threshold": 28000
-}
