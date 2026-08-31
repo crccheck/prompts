@@ -1,7 +1,8 @@
 ---
-name: myreview
 description: Review a pull request
 ---
+
+Review $ARGUMENTS
 
 ## Fetching the diff
 
@@ -29,10 +30,11 @@ Compare each finding against the existing review comments. Drop a finding if an 
 
 Detect by author (`dependabot[bot]`) or title pattern (`Bump <package>`). If this is a dependabot PR, the review MUST answer all of the following before reporting any findings:
 
-1. What does this package do?
-2. Is it a direct or transitive dependency?
-3. What is the impact on this project? First, grep the codebase to map every usage of the package (imports, config references, rule names, API calls). Then fetch the release notes for every version in the bumped range (every release from old_version+1 through new_version, inclusive). Cross-reference each changelog change against the mapped usage — report only whether each change affects this project, not a raw changelog summary.
-4. How far behind are we? If the changelog has dates, compute the time between the bumped-from version's release date and today.
+1. When was this last upgraded? Run `git log --format="%H %ai %s" -- <requirements-file> | grep -i <package>` to find prior upgrade commits. Read the PR description and any comments for QA or verification hints the author may have left. Note frequent churn.
+2. What does this package do?
+3. Is it a direct or transitive dependency?
+4. What is the impact on this project? First, grep the codebase to map every usage of the package (imports, config references, rule names, API calls). Then fetch the release notes for every version in the bumped range (every release from old_version+1 through new_version, inclusive). Cross-reference each changelog change against the mapped usage — report only whether each change affects this project, not a raw changelog summary.
+5. How far behind are we? If the changelog has dates, compute the time between the bumped-from version's release date and today.
 
 Run these steps sequentially — each one primes the context for the next.
 
@@ -49,9 +51,11 @@ If a dependency PR touches `.pre-commit-config.yaml`:
 - Do not comment on things that are correct or good
 - Point to a line with a GitHub permalink using the full 40-char commit SHA: `https://github.com/<owner>/<repo>/blob/<full-sha>/path/to/file.py#L10-L15`. Get the full SHA with `git rev-parse <short-sha>`.
 
-## Approval format
+## Approval
 
-When asked to approve, MUST submit via:
+MUST ask the user for permission before submitting any write action (approve, request changes, comment, merge). Never approve on your own initiative.
+
+When the user grants permission to approve, submit via:
 
 ```
 gh pr review <number> --approve -b "<body>"
@@ -69,6 +73,12 @@ The body MUST follow this template exactly — no exceptions:
 
 If any manual verification was performed during the review, include the results in the comment body.
 
+For Dependabot PRs, append to the comment body:
+
+```
+Last upgraded: #<PR number> (<old version> → <new version>, merged <date>).
+```
+
 ## Reflect
 
-- If your review was contested, don't save a memory, don't ignore it; ask the user what to change in the skill and get explicit permission before editing it, idiot
+- If your review was contested, don't save a memory, don't ignore it; ask the user what to change in ~/.claude/commands/myreview.md and get explicit permission before editing it, idiot

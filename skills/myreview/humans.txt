@@ -1,3 +1,0 @@
-Avoid formatting instructions. They just confuse Claude. When it sees
-formatting, its mind breaks and it starts breaking rules just to achieve what it
-thinks is the output template. It always makes bad decisions.
