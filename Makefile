@@ -5,3 +5,4 @@ install: ## Install prompts
 	cd ~/.claude && ln -sf $(PWD)/CLAUDE.md
 	cd ~/.claude && ln -sf $(PWD)/standards
 	cd ~/.claude && ln -sf $(PWD)/skills
+	ln -s ~/Sync/prompts/commands ~/.omp/agent/commands

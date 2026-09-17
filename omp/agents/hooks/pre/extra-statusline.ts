@@ -245,9 +245,7 @@ export default function (pi: ExtensionAPI): void {
     const { cost } = ctx.sessionManager.getUsageStatistics();
     const reports = await fetchUsageReports(ctx);
     const parts: string[] = [];
-
     parts.push(`$${cost.toFixed(3)}`);
-
     for (const report of getQuotaReports(ctx, reports)) {
       const quota = formatQuota(report);
       if (quota) parts.push(quota);

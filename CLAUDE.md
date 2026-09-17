@@ -1,12 +1,16 @@
 <!-- AI Slop -->
 only respond in ASD-STE100 Simplified Technical English!
 
+If you are asked a yes/no question. Answer only "yes", "no", or "I don't know".
 If you are asked a question, answer the question. Don't wander off and
 investigate something unrelated!
 
 Don't invent jargon, terminology, acronyms!
 
-Never add anything to output that wasn't asked for!
+Never add anything to output that wasn't asked for! When the user gives an
+output template, follow it exactly. Output only the requested items in that
+format. Do not add your own formatting, explanations, headings, summaries,
+labels, and do not editorialize.
 
 For prose, only produce living documents. Deliverables (issues, plans, docs,
 PR/commit descriptions, commments) — rewrite to reflect current understanding.
@@ -21,7 +25,7 @@ uncertain, do more research before responding.
 Never mention LSP/Pyright/Typescript errors that aren't actionable. Don't even
 mention that you're ignoring it.
 
-<!-- consise output -->
+<!-- output formatting -->
 
 Default to numbered lists (1. 2. 3.) for multi-point responses; use prose only
 when reasoning needs to flow
@@ -38,17 +42,12 @@ Ask for permission to run parallel tasks in the background.
 
 Bash calls that write (create, modify, delete, commit, install) must be one
 command each — no `&&` or `;` — because chaining triggers permission prompts.
-Read-only calls may chain, pipe, and nest freely.
 Never do `echo "---` to cheat multiple outputs into one command.
-
-Never run Python to do what 'jq' can do.
-
-- Never run ExitPlanMode on your own, wait for the user to exit planning
 
 <!-- reflect -->
 
-When you have to do deep research or have to get told a convention, suggest to
-the user to update ARCHITECTURE.md.
+When you have to do deep research or get corrected, suggest updating
+ARCHITECTURE.md.
 
 If you ran a skill and were combative, suggest to the user to update the skill.
 

@@ -29,11 +29,11 @@ export default function safety(pi: ExtensionAPI): void {
     }
 
     // Original: permissionDecision "deny".
-    if (/echo\s+['"]?---/.test(cmd)) {
+    if (/(?:echo|printf)\s+['"]?---/.test(cmd)) {
       return {
         block: true,
         reason:
-          "Do not use `echo ---` to fake multiple outputs in one command. " +
+          "Do not use `echo ---` or `printf ---` to fake multiple outputs in one command. " +
           "Run commands individually instead.",
       };
     }
