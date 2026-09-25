@@ -8,16 +8,7 @@
  */
 import type { ExtensionAPI, ExtensionContext } from "@oh-my-pi/pi-coding-agent";
 import type { UsageLimit, UsageReport } from "@oh-my-pi/pi-ai";
-import { homedir } from "node:os";
-import { join } from "node:path";
-type MetricsFn = (text: string) => { yelling: number; profanity: number; anguish: number; negation: number; repetition: number; blame: number };
-// Static subpath imports of @oh-my-pi/omp-stats fail from the hook directory
-// (Bun 1.4.0 "Unexpected" on wildcard exports). Resolve from the bun global
-// store where the package actually lives, then dynamic-import the absolute path.
-const _bunGlobal = join(process.env.BUN_INSTALL ?? join(homedir(), ".bun"), "install", "global");
-const computeUserMessageMetrics = ((await import(
-  Bun.resolveSync("@oh-my-pi/omp-stats/user-metrics", _bunGlobal)
-)) as { computeUserMessageMetrics: MetricsFn }).computeUserMessageMetrics;
+import { computeUserMessageMetrics } from "../lib/user-metrics";
 
 interface Cache<T> {
   value: T;
@@ -32,7 +23,7 @@ async function fetchUsageReports(ctx: ExtensionContext): Promise<UsageReport[]> 
   if (usageCache && now - usageCache.at < TTL) return usageCache.value;
 
   try {
-    const reports = await ctx.modelRegistry.authStorage.fetchUsageReports();
+    const reports = await ctx.modelRegistry.authStorage.usage.reports();
     if (reports) {
       usageCache = { value: reports, at: Date.now() };
       return reports;
@@ -42,13 +33,14 @@ async function fetchUsageReports(ctx: ExtensionContext): Promise<UsageReport[]> 
   return usageCache?.value ?? [];
 }
 
-type ProviderIdentity = { accountId?: string; email?: string; orgId?: string };
+type ProviderIdentity = { accountId?: string; email?: string; projectId?: string; orgId?: string };
 
 function reportMatchesActiveAccount(report: UsageReport, identity: ProviderIdentity | undefined): boolean {
   if (!identity) return true;
   const metadata = report.metadata ?? {};
   if (identity.accountId && metadata.accountId !== identity.accountId) return false;
   if (identity.email && metadata.email !== identity.email) return false;
+  if (identity.projectId && metadata.projectId !== identity.projectId) return false;
   if (identity.orgId && metadata.orgId !== identity.orgId) return false;
   return true;
 }
@@ -58,7 +50,7 @@ function getReportForProvider(
   reports: UsageReport[],
   provider: string,
 ): UsageReport | undefined {
-  const identity = ctx.modelRegistry.authStorage.getOAuthAccountIdentity(
+  const identity = ctx.modelRegistry.authStorage.oauth.identity(
     provider,
     ctx.sessionManager.getSessionId(),
   );
@@ -108,6 +100,12 @@ function getUsagePercent(limit: UsageLimit): number | undefined {
   return undefined;
 }
 
+const GAUGE_BLOCKS = " ▏▎▍▌▋▊▉█";
+function gauge(percent: number): string {
+  const clamped = Math.min(Math.max(percent, 0), 100);
+  return GAUGE_BLOCKS[Math.round((clamped / 100) * 8)];
+}
+
 function formatDuration(msDelta: number): string {
   const mins = Math.max(0, Math.round(msDelta / 60_000));
   const days = Math.floor(mins / 1_440);
@@ -131,7 +129,23 @@ function getRecord(value: unknown): Record<string, unknown> | undefined {
 }
 
 const claudeQuota = {
-  format(report: UsageReport): string | undefined {
+  formatRolling(report: UsageReport): string | undefined {
+    const parts: string[] = [];
+    for (const [id, label] of [
+      ["anthropic:5h", "5h"],
+      ["anthropic:7d", "wk"],
+    ] as const) {
+      const limit = report.limits.find(l => l.id === id);
+      if (!limit) continue;
+      const percent = getUsagePercent(limit);
+      if (percent === undefined) continue;
+      const resetAt = limit.window?.resetsAt;
+      parts.push(`${label} ${Math.round(Math.min(Math.max(percent, 0), 100))}%${gauge(percent)}${formatReset(resetAt)}`);
+    }
+    return parts.length ? parts.join(" ") : undefined;
+  },
+
+  formatExtra(report: UsageReport): string | undefined {
     const extra = report.limits.find(
       limit => limit.id === "anthropic:extra" || limit.scope.windowId === "extra",
     );
@@ -145,9 +159,20 @@ const claudeQuota = {
         new Date().getMonth() + 1,
         1,
       ).getTime();
-      return `Claude $${used}/$${Math.round(extra.amount.limit)}${formatResetDate(resetAt)}`;
+      return `$${used}/$${Math.round(extra.amount.limit)}${formatResetDate(resetAt)}`;
     }
-    return `Claude $${used}`;
+    return `$${used}`;
+  },
+
+  format(report: UsageReport): string | undefined {
+    // Rolling 5h/7d windows cover Pro/Max plans; extra-usage $ covers
+    // Enterprise overage spend. A single account can report either or both.
+    const parts: string[] = [];
+    const rolling = claudeQuota.formatRolling(report);
+    if (rolling) parts.push(rolling);
+    const extra = claudeQuota.formatExtra(report);
+    if (extra) parts.push(extra);
+    return parts.length ? `Claude ${parts.join(" ")}` : undefined;
   },
 };
 
@@ -220,7 +245,7 @@ const codexQuota = {
       if (percent === undefined) continue;
       const label = windowId === "7d" ? "wk" : "5h";
       const resetAt = limit.window?.resetsAt;
-      parts.push(`${label} ${Math.round(Math.min(Math.max(percent, 0), 100))}%${formatReset(resetAt)}`);
+      parts.push(`${label} ${Math.round(Math.min(Math.max(percent, 0), 100))}%${gauge(percent)}${formatReset(resetAt)}`);
     }
     const creditUsage = codexQuota.getCreditUsage(report);
     const credits = codexQuota.getCreditsBalance(report);
