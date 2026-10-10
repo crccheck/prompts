@@ -263,7 +263,7 @@ function formatQuota(report: UsageReport | undefined): string | undefined {
 }
 
 export default function (pi: ExtensionAPI): void {
-  let sig = { yelling: 0, profanity: 0, anguish: 0, negation: 0, repetition: 0, blame: 0 };
+  let sig = { messages: 0, signaledMessages: 0, yelling: 0, profanity: 0, anguish: 0, negation: 0, repetition: 0, blame: 0 };
 
   async function update(ctx: ExtensionContext): Promise<void> {
     if (!ctx.hasUI) return;
@@ -283,6 +283,7 @@ export default function (pi: ExtensionAPI): void {
     if (sig.negation)   signals.push(`neg:${sig.negation}`);
     if (sig.repetition) signals.push(`rep:${sig.repetition}`);
     if (sig.blame)      signals.push(`blame:${sig.blame}`);
+    if (sig.messages) signals.push(`💩:${Math.round((sig.signaledMessages / sig.messages) * 100)}%`);
     if (signals.length) parts.push(signals.join(" "));
 
     ctx.ui.setStatus("extra", parts.join(" | "));
@@ -292,8 +293,10 @@ export default function (pi: ExtensionAPI): void {
   pi.on("turn_start", async (_event, ctx) => update(ctx));
   pi.on("turn_end", async (_event, ctx) => update(ctx));
   pi.on("input", async (event, ctx) => {
+    sig.messages++;
     const m = computeUserMessageMetrics(event.text);
     const delta = m.yelling + m.profanity + m.anguish + m.negation + m.repetition + m.blame;
+    if (delta > 0) sig.signaledMessages++;
     if (delta > 0) {
       sig.yelling    += m.yelling;
       sig.profanity  += m.profanity;
@@ -301,7 +304,7 @@ export default function (pi: ExtensionAPI): void {
       sig.negation   += m.negation;
       sig.repetition += m.repetition;
       sig.blame      += m.blame;
-      await update(ctx);
     }
+    await update(ctx);
   });
 }
