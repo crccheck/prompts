@@ -3,32 +3,73 @@ import { computeUserMessageMetrics } from "../lib/user-metrics";
 
 const COMMIT = /(?:^|[;&|]\s*)git\s+commit\b/;
 
-export default function commitUsage(pi: ExtensionAPI): void {
-  let baseline = { cost: 0, input: 0, output: 0 };
+type Part = { type: string; text?: string; id?: string; name?: string; arguments?: { command?: unknown } };
+type Message = {
+  role: string;
+  content: string | Part[];
+  toolCallId?: string;
+  isError?: boolean;
+  usage?: { input: number; output: number; cost: { total: number } };
+};
+
+function trailer(ctx: ExtensionContext): string {
+  const messages = ctx.sessionManager
+    .getBranch()
+    .flatMap((entry) => (entry.type === "message" ? [entry.message as Message] : []));
+
+  const commitCallIds = new Set(
+    messages.flatMap((m) =>
+      m.role === "assistant" && Array.isArray(m.content)
+        ? m.content
+            .filter(
+              (p) =>
+                p.type === "toolCall" &&
+                p.name === "bash" &&
+                typeof p.arguments?.command === "string" &&
+                COMMIT.test(p.arguments.command),
+            )
+            .map((p) => p.id)
+        : [],
+    ),
+  );
+  const lastCommit = messages.findLastIndex(
+    (m) => m.role === "toolResult" && !m.isError && commitCallIds.has(m.toolCallId),
+  );
+
+  let input = 0;
+  let output = 0;
+  let cost = 0;
   let prompts = 0;
   let signaledPrompts = 0;
-
-  function trailer(ctx: ExtensionContext): string {
-    const { cost, input, output } = ctx.sessionManager.getUsageStatistics();
-    const tokens = `${input - baseline.input}/${output - baseline.output}`;
-    const parts = [
-      `model=${ctx.model?.id ?? "unknown"}`,
-      `prompts=${prompts}`,
-      `cost=${(cost - baseline.cost).toFixed(2)}`,
-      `tokens=${tokens}`,
-    ];
-    if (prompts) parts.push(`poop=${(signaledPrompts / prompts).toFixed(2)}`);
-    return `Agent-Usage: ${parts.join(" ")}`;
+  for (const m of messages.slice(lastCommit + 1)) {
+    if (m.role === "assistant" && m.usage) {
+      input += m.usage.input;
+      output += m.usage.output;
+      cost += m.usage.cost.total;
+    } else if (m.role === "user") {
+      prompts++;
+      const text =
+        typeof m.content === "string"
+          ? m.content
+          : m.content.map((p) => (p.type === "text" ? p.text : "")).join("\n");
+      const s = computeUserMessageMetrics(text);
+      if (s.yelling + s.profanity + s.anguish + s.negation + s.repetition + s.blame > 0) {
+        signaledPrompts++;
+      }
+    }
   }
 
-  pi.on("input", async (event) => {
-    prompts++;
-    const m = computeUserMessageMetrics(event.text);
-    if (m.yelling + m.profanity + m.anguish + m.negation + m.repetition + m.blame > 0) {
-      signaledPrompts++;
-    }
-  });
+  const parts = [
+    `model=${ctx.model?.id ?? "unknown"}`,
+    `prompts=${prompts}`,
+    `cost=${cost.toFixed(2)}`,
+    `tokens=${input}/${output}`,
+  ];
+  if (prompts) parts.push(`poop=${(signaledPrompts / prompts).toFixed(2)}`);
+  return `Agent-Usage: ${parts.join(" ")}`;
+}
 
+export default function commitUsage(pi: ExtensionAPI): void {
   pi.on("tool_call", async (event, ctx) => {
     if (event.toolName !== "bash" || typeof event.input.command !== "string") return;
     if (!COMMIT.test(event.input.command)) return;
@@ -37,14 +78,5 @@ export default function commitUsage(pi: ExtensionAPI): void {
       (match) => `${match} --trailer '${trailer(ctx)}'`,
     );
     return { input: { ...event.input, command } };
-  });
-
-  pi.on("tool_result", async (event, ctx) => {
-    if (event.toolName !== "bash" || event.isError) return;
-    if (typeof event.input.command !== "string" || !COMMIT.test(event.input.command)) return;
-    const { cost, input, output } = ctx.sessionManager.getUsageStatistics();
-    baseline = { cost, input, output };
-    prompts = 0;
-    signaledPrompts = 0;
   });
 }
