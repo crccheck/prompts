@@ -28,6 +28,23 @@ export default function safety(pi: ExtensionAPI): void {
       };
     }
 
+    if (/\bgit\s+add\b[^;&|\n]*\s-A(?=\s|$)/.test(cmd)) {
+      return {
+        block: true,
+        reason:
+          "Do not use `git add -A`. Add specific files by path instead.",
+      };
+    }
+
+    if (/\bgit\s+commit\b[^;&|\n]*\s-[a-zA-Z]*m\b[^;&|\n]*\s-[a-zA-Z]*m\b/.test(cmd)) {
+      return {
+        block: true,
+        reason:
+          "Do not use multiple `-m` flags with `git commit`. Use one `-m` with the " +
+          "full message: a subject line, a blank line, and a body wrapped at 72 columns.",
+      };
+    }
+
     // Original: permissionDecision "deny".
     if (/(?:echo|printf)\s+['"]?---/.test(cmd)) {
       return {

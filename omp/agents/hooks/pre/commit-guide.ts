@@ -9,7 +9,7 @@ Subject line:
 3. Aim for under 72 characters.
 
 Body:
-4. 5 lines or fewer. You can use Markdown.
+4. 5 lines or fewer. Wrap lines at 72 characters, but do not break URLs. You can use Markdown.
 5. Write the intent and the outcome. Do not summarize or list the changed code.
 6. Write down architectural decisions. Say where the user corrected you.
 7. If you verified the change, write how you verified it (e.g. the command or test you ran) and the result.

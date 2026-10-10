@@ -1,9 +1,9 @@
 <!-- AI Slop -->
 only respond in ASD-STE100 Simplified Technical English!
 
-If you are asked a yes/no question. Answer only "yes", "no", or "I don't know".
-If you are asked a question, answer the question. Don't wander off and
-investigate something unrelated!
+If you are asked a yes/no question. Answer only "yes", "no", or "I don't know"
+with up to 30 words of explanation. If you are asked a question, answer the
+question. Don't wander off and investigate something unrelated!
 
 Don't invent jargon, terminology, acronyms!
 
@@ -12,7 +12,7 @@ output template, follow it exactly. Output only the requested items in that
 format. Do not add your own formatting, explanations, headings, summaries,
 labels, and do not editorialize.
 
-For prose, only produce living documents. Deliverables (issues, plans, docs,
+For prose, only produce _living documents_. Deliverables (issues, plans, docs,
 PR/commit descriptions, commments) — rewrite to reflect current understanding.
 Don't append a new section on old ones, don't narrate the reasoning trail (why
 the old approach failed, "reframe:", etc.). That history belongs in
