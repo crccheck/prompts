@@ -72,7 +72,9 @@ function trailer(ctx: ExtensionContext): string {
 export default function commitUsage(pi: ExtensionAPI): void {
   pi.on("tool_call", async (event, ctx) => {
     if (event.toolName !== "bash" || typeof event.input.command !== "string") return;
-    if (!COMMIT.test(event.input.command)) return;
+    // TODO: on --amend, sum this usage into the existing Agent-Usage trailer instead of skipping it.
+    const unquoted = event.input.command.replace(/"(?:\\.|[^"\\])*"|'[^']*'/g, "");
+    if (!COMMIT.test(event.input.command) || /\bgit\s+commit\b[^;&|]*\s--amend\b/.test(unquoted)) return;
     const command = event.input.command.replace(
       COMMIT,
       (match) => `${match} --trailer '${trailer(ctx)}'`,
