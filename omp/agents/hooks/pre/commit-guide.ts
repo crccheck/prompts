@@ -19,7 +19,7 @@ Before you commit:
 9. If this change fixes your earlier commit, amend that commit. Do not make an "oops" commit.`;
 
 const ADD = /(?:^|[;&|]\s*)git\s+add\b/;
-const COMMIT = /(?:^|[;&|]\s*)git\s+commit\b/;
+const COMMIT = /(?:^|[;&|]\s*)git\s+(?:-c\s+\S+\s+)*commit\b/;
 
 type Part = {
   type: string;
@@ -65,7 +65,7 @@ export default function commitGuide(pi: ExtensionAPI): void {
       const content = (m.content as Part[]).map((part) => {
         if (part.type !== "text" || !part.text?.includes(MARKER)) return part;
         changed = true;
-        return { ...part, text: "[commit guide elided]" };
+        return { ...part, text: "[commit guide elided: a hook gave commit-message rules here and removed them after the commit]" };
       });
       return { ...m, content };
     });
