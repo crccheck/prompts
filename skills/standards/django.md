@@ -1,6 +1,3 @@
----
-globs: ["**/tests/**/*.py", "**/test_*.py"]
----
 # Django
 
 ## Django tests

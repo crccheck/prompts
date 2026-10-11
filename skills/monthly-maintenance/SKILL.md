@@ -41,7 +41,9 @@ Read the project's config files and note what's pinned and where:
 - **Pre-commit hooks**: for each repo in `.pre-commit-config.yaml`, check its
   GitHub releases page for the latest tag.
 - **GitHub Actions**: use the `upgrade-github-workflows` skill to audit
-  `.github/workflows/`.
+  `.github/workflows/`. Pin every action to the full commit SHA of the
+  exact release, with the version in a trailing comment
+  (`uses: actions/checkout@<sha> # v7.0.1`).
 - **Python version**: latest stable is at https://www.python.org/downloads/ —
   only bump if there's a reason to (new minor release, current version nearing EOL).
 - **Dockerfile base image**: for each `FROM` line, check the image's registry
@@ -62,7 +64,7 @@ Before making any changes, present a summary table:
 |------------------|---------|--------|------------|
 | ruff-pre-commit  | v0.X.Y  | v0.A.B | bump       |
 | pre-commit-hooks | v4.X.Y  | v5.A.B | bump       |
-| actions/checkout | v4      | v5     | bump       |
+| actions/checkout | v4.2.2  | v5.0.0 | bump       |
 | Python           | 3.12    | 3.13   | up to date |
 | Dockerfile base  | 3.12-slim | 3.13-slim | bump |
 ```
@@ -77,7 +79,7 @@ Edit each file directly. Pay attention to:
 - Coupled versions that must stay in sync (e.g. `ruff-pre-commit` rev and the ruff version constraint in `pyproject.toml`)
 - Range constraints (e.g. `>=0.12,<0.13`) need both bounds updated when crossing a series boundary
 
-Commit the version bumps (mechanical, low-risk change — keep it separate per `standards/git.md`):
+Commit the version bumps (mechanical, low-risk change — keep it in its own commit):
 
 ```bash
 git commit -am 'chore: bump pre-commit hook and action versions'

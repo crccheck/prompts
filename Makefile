@@ -3,10 +3,10 @@ help: ## Shows this help
 
 install: ## Install prompts
 	cd ~/.claude && ln -sf $(PWD)/CLAUDE.md
-	cd ~/.claude && ln -sf $(PWD)/standards
 	cd ~/.claude && ln -sf $(PWD)/skills
 	ln -s ~/Sync/prompts/commands ~/.omp/agent/commands
 	ln -s ~/Sync/prompts/omp/agents/hooks ~/.omp/agent/hooks
+	ln -s ~/Sync/prompts/omp/agents/rules ~/.omp/agent/rules
 
 update-user-metrics: ## Re-vendor omp/agents/hooks/lib/user-metrics.ts from @oh-my-pi/omp-stats
 	rm -f omp/agents/hooks/lib/user-metrics.ts

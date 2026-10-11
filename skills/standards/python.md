@@ -1,23 +1,6 @@
----
-globs: ["**/*.py", "**/pyproject.toml"]
----
+# Python project setup
 
-# Python style
-
-Projects use modern pyproject.toml with 'uv' for package management, 'ruff' for
-linting and formatting, and 'mypy' for type checking.
-
-Projects will always use a virtual environments stored in `./.venv`. Remember to
-use the virtualenv when running Python.
-
-New code should have type annotations. Old code will gradually get typed as it's
-iterated upon.
-
-Add thousands separators to numbers over 9999 that end in "000" (e.g., 10_000)
-
-## Imports
-
-Do not attempt to remove imports. 'ruff' will fix them later.
+Python style rules are in `rule://python`.
 
 ## pyproject.toml
 
@@ -25,7 +8,7 @@ Use dependency groups for 'dev' dependencies, not 'project.optional-dependencies
 
 ```
 [tool.uv]
-exclude-newer = "7 days"
+exclude-newer = "3 days"
 
 [dependency-groups]
 dev = [...]
@@ -57,7 +40,3 @@ ignore_missing_imports = true
 warn_unused_ignores = true
 exclude = ["migrations/"]  # Add this exclude to Django projects
 ```
-
-# Pyright
-
-Do not report on Pyright errors or warnings that are unactionable!
