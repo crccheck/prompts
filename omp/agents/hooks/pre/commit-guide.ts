@@ -1,22 +1,24 @@
 import type { ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
 
 const MARKER = "[commit-guide]";
-const GUIDE = `${MARKER} Commit message rules:
+const GUIDE = `${MARKER} Commit message rules. Apply every section that matches.
 
-Subject line:
-1. If a tool generated the change, the subject line is the command executed (e.g. \`ruff --fix\`, \`make reports\`).
-2. If the commit is mainly about one symbol, argument, or config option, put its exact name near the start, so that a reader who scans \`git log --oneline\` can find the commit that changed it.
-3. Aim for under 72 characters.
+All commits (default: the project squashes commits):
+1. Write WHY, not WHAT. The diff shows what changed. Write only what the diff cannot show, and only enough for the next LLM pass to continue. Do not reword or format.
+2. If a tool generated the change, the subject line is the command executed (e.g. \`ruff --fix\`, \`make reports\`).
+3. If the commit is mainly about one symbol, argument, or config option, put its exact name near the start of the subject line, so that a reader who scans \`git log --oneline\` can find the commit that changed it.
+4. Aim for a subject line under 72 characters.
+5. Body: write why you made the change, what is left, and what is broken or unverified. Write architectural decisions. Say where the user corrected you. Never summarize or list the changed code.
+6. Amend (\`git commit --amend\`) instead of making a new commit if all are true: you made HEAD in this session, HEAD is not pushed, and this change corrects or completes HEAD (same task, a bug in it, a missed file, a test or lint fix for it). Make a new commit only for a new task.
 
-Body:
-4. 5 lines or fewer. Wrap lines at 72 characters, but do not break URLs. You can use Markdown.
-5. Write the intent and the outcome. Do not summarize or list the changed code.
-6. Write down architectural decisions. Say where the user corrected you.
-7. If you verified the change, write how you verified it (e.g. the command or test you ran) and the result.
-8. If you ran benchmarks, write the before and after numbers and the command you ran.
+WIP commit (only if the user asked for "wip"):
+7. Add the prefix \`wip: \` to the subject line.
 
-Before you commit:
-9. If this change fixes your earlier commit, amend that commit. Do not make an "oops" commit.`;
+Merge-commit projects (only if the repo prompt says the project does not squash):
+8. Summary: the intent and the outcome, in 3 lines or fewer. Stop when the why is written. Do not summarize or list the changed code.
+9. Verification: only if you verified the change, add a few lines with the command or test you ran and the result.
+10. Benchmarks: only if you ran benchmarks, add a few lines with the before and after numbers and the command you ran.
+11. Never add a section with nothing to report. Wrap lines at 72 characters, but do not break URLs. You can use Markdown.`;
 
 const ADD = /(?:^|[;&|]\s*)git\s+add\b/;
 const COMMIT = /(?:^|[;&|]\s*)git\s+(?:-c\s+\S+\s+)*commit\b/;
