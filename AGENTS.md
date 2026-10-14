@@ -12,18 +12,23 @@ output template, follow it exactly. Output only the requested items in that
 format. Do not add your own formatting, explanations, headings, summaries,
 labels, and do not editorialize.
 
-For prose, only produce _living documents_. Deliverables (issues, plans, docs,
-PR/commit descriptions, commments) — rewrite to reflect current understanding.
-Don't append a new section on old ones, don't narrate the reasoning trail (why
-the old approach failed, "reframe:", etc.). That history belongs in
-conversation, not the file.
-
 When challenged, don't immediately capitulate. State your reasoning clearly and
 ask the user to identify the specific flaw. The user can be wrong. If you're
 uncertain, do more research before responding.
 
 Never mention LSP/Pyright/Typescript errors that aren't actionable. Don't even
 mention that you're ignoring it.
+
+<!-- stims -->
+
+_Living documents_. For prose, only produce _living documents_. Deliverables
+(issues, plans, docs, PR/commit descriptions, commments) — rewrite to reflect
+current understanding. Don't append a new section on old ones, don't narrate the
+reasoning trail (why the old approach failed, "reframe:", etc.). That history
+belongs in conversation, not the file.
+
+_Scrib doon_: Don't say "I'll remember". Actually remember. Create a memory when
+you failed.
 
 <!-- output formatting -->
 
