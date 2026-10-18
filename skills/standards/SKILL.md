@@ -1,6 +1,6 @@
 ---
 name: standards
-description: My coding standards (GitHub Actions, GitHub workflows, Makefile, Python, Django, scrapers). Use when starting a new project, auditing or upgrading an existing project against my standards, or when asked to "update my standards".
+description: My coding standards (code review, GitHub Actions, GitHub workflows, Makefile, Python, Django, scrapers). Use when starting a new project, auditing or upgrading an existing project against my standards, doing code review, or when asked to "update my standards".
 ---
 
 # Standards
@@ -9,10 +9,11 @@ Topic files are in this skill directory. Read only the files that apply.
 
 | File                  | Applies to                                                              |
 | --------------------- | ----------------------------------------------------------------------- |
+| `django.md`           | Django projects; test rules apply to `**/tests/**/*.py`, `**/test_*.py` |
 | `github-workflows.md` | GitHub Actions and GitHub workflows (`.github/workflows`)               |
 | `makefile.md`         | Every project with a `Makefile`                                         |
 | `python.md`           | Python project setup: `pyproject.toml`, uv, ruff, mypy                  |
-| `django.md`           | Django projects; test rules apply to `**/tests/**/*.py`, `**/test_*.py` |
+| `review-standards.md` | Code reviews, PR reviews, commit-range reviews                          |
 | `scrapers.md`         | Scrapers, ingesters, downloaders that fetch from a 3rd party            |
 
 ## Start a new project

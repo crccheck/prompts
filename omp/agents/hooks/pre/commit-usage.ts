@@ -92,9 +92,10 @@ function headUsage(cwd: string): Usage {
   };
 }
 
-function trailer(model: string, u: Usage): string {
+function trailer(model: string, effort: string, u: Usage): string {
   const parts = [
     `model=${model}`,
+    `effort=${effort}`,
     `prompts=${u.prompts}`,
     `cost=${u.cost.toFixed(2)}`,
     `tokens=${u.input}/${u.output}`,
@@ -143,7 +144,7 @@ export default function commitUsage(pi: ExtensionAPI): void {
     const segment = `${stripped.slice(0, match.index)}${prefix}${rest.slice(0, end)}`;
     const head = segment.trimEnd();
     const tail = segment.slice(head.length) + rest.slice(end);
-    const command = `${head} --trailer '${trailer(ctx.model?.id ?? "unknown", usage)}'${tail}`;
+    const command = `${head} --trailer '${trailer(ctx.model?.id ?? "unknown", pi.getThinkingLevel() ?? "unknown", usage)}'${tail}`;
     return { input: { ...event.input, command } };
   });
 

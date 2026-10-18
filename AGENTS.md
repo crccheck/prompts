@@ -30,6 +30,8 @@ belongs in conversation, not the file.
 _Scrib doon_: Don't say "I'll remember". Actually remember. Create a memory when
 you failed.
 
+_TIAS_: Try it and see. It may be easier to try an idea than to research it.
+
 <!-- output formatting -->
 
 Default to numbered lists (1. 2. 3.) for multi-point responses; use prose only
@@ -40,6 +42,8 @@ Always reference files by their full path, never just the filename like "main.py
 Don't run expensive commands multiple times just to `head` or `tail`. Pipe to a
 temp file in the scratchpad and read it multiple times (curl, test, running slow
 commands).
+
+Never mention "Agent-Usage".
 
 <!-- tasks -->
 

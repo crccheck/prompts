@@ -3,6 +3,14 @@ import type { ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
 export default function safety(pi: ExtensionAPI): void {
   // ── Bash safety hooks (ported from PreToolUse) ────────────────────────────
   pi.on("tool_call", async (event) => {
+    // Ban mentioning "Agent-Usage" in any tool input (commands, written files, edits).
+    if (/agents?[-_ ]usage/i.test(JSON.stringify(event.input ?? {}))) {
+      return {
+        block: true,
+        reason: 'Do not mention "Agent-Usage".',
+      };
+    }
+
     if (event.toolName !== "bash") return;
     const cmd =
       typeof event.input.command === "string" ? event.input.command : "";
