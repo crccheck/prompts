@@ -1,6 +1,8 @@
 ---
 name: standards
-description: My coding standards (code review, GitHub Actions, GitHub workflows, Makefile, Python, Django, scrapers). Use when starting a new project, auditing or upgrading an existing project against my standards, doing code review, or when asked to "update my standards".
+description: My coding standards. Manual only; load when the user explicitly invokes /skill:standards or asks for "my standards".
+disable-model-invocation: true
+hide: false
 ---
 
 # Standards
