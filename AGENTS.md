@@ -57,5 +57,3 @@ Never do `echo "---` to cheat multiple outputs into one command.
 
 When you have to do deep research or get corrected, suggest updating
 ARCHITECTURE.md.
-
-If you ran a skill and were combative, suggest to the user to update the skill.

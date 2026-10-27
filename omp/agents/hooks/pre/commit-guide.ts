@@ -13,8 +13,8 @@ All commits (default: the project squashes commits):
 
 Subject prefix (decided only by the user's exact words in this request):
 7. If the user said "commit wip": start the subject with \`wip: \`.
-   If the user said "commit with <type>": use \`<type>: subject\`.
-   If the user said "commit with <type/scope>": use \`<type>(<scope>): subject\`.
+   If the user said "commit as <type>": use \`<type>: subject\`.
+   If the user said "commit as <type/scope>": use \`<type>(<scope>): subject\`.
    Otherwise: use a plain sentence subject. The subject MUST NOT contain a prefix: no "word:" or "word(scope):" start, no made-up type or label of any kind, and no colon in the first words. Only the user's exact words above allow a prefix. Do not capitalize the first word.
 
 Merge-commit projects (only if the repo prompt says the project does not squash):
