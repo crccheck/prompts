@@ -2,8 +2,7 @@ help: ## Shows this help
 	@echo "$$(grep -h '#\{2\}' $(MAKEFILE_LIST) | sed 's/: #\{2\} /	/' | column -t -s '	')"
 
 install: ## Install prompts
-	cd ~/.claude && ln -sf $(PWD)/CLAUDE.md
-	cd ~/.claude && ln -sf $(PWD)/skills
+	ln -s ~/Sync/prompts/AGENTS.md ~/.omp/agent/AGENTS.md
 	ln -s ~/Sync/prompts/commands ~/.omp/agent/commands
 	ln -s ~/Sync/prompts/omp/agents/hooks ~/.omp/agent/hooks
 	ln -s ~/Sync/prompts/omp/agents/rules ~/.omp/agent/rules

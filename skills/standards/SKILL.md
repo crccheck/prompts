@@ -13,6 +13,7 @@ Topic files are in this skill directory. Read only the files that apply.
 | --------------------- | ----------------------------------------------------------------------- |
 | `django.md`           | Django projects; test rules apply to `**/tests/**/*.py`, `**/test_*.py` |
 | `github-workflows.md` | GitHub Actions and GitHub workflows (`.github/workflows`)               |
+| `jpegxl.md`           | JPEG XL conversion and image metadata with `cjxl` and `exiftool`        |
 | `makefile.md`         | Every project with a `Makefile`                                         |
 | `python.md`           | Python project setup: `pyproject.toml`, uv, ruff, mypy                  |
 | `review-standards.md` | Code reviews, PR reviews, commit-range reviews                          |

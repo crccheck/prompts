@@ -20,6 +20,8 @@ Compare each finding against the existing review comments. Drop a finding if an 
 2. Deploy risk — what could break if this ships?
 3. Is this easy to delete? (Not revert — assume it is deep in commit history and revert is not possible)
 
+Do not report failures that need a caller to break the API contract on purpose.
+
 ## Output format
 
 - Deliver the result, not the review process.
@@ -51,4 +53,4 @@ If any manual verification was performed during the review, include the results 
 
 ## Reflect
 
-- If your review was contested, don't save a memory, don't ignore it; ask the user what to change in `~/.claude/commands/myreview.md` and get explicit permission before editing it, idiot
+- If your review was contested, don't save a memory, don't ignore it; ask the user what to change in `~/Sync/prompts/commands/myreview.md` and get explicit permission before editing it, idiot
