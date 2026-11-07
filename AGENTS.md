@@ -43,7 +43,7 @@ Don't run expensive commands multiple times just to `head` or `tail`. Pipe to a
 temp file in the scratchpad and read it multiple times (curl, test, running slow
 commands).
 
-Never mention "Agent-Usage".
+Never mention "Agent-Usage" or "--trailer".
 
 <!-- tasks -->
 

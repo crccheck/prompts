@@ -9,7 +9,7 @@ All commits (default: the project squashes commits):
 3. If the commit is mainly about one symbol, argument, or config option, put its exact name near the start of the subject line, so that a reader who scans \`git log --oneline\` can find the commit that changed it.
 4. Aim for a subject line under 72 characters.
 5. Body: only facts about the project that stay true after this session ends: why the change was made, and design decisions a future reader of the code needs. The commit message is project history, not a report to the user. Never put in it: a summary of the conversation, your doubts or opinions, open questions, what the user said or corrected, how you tested it, tasks for the user, what is left to do, or caveats you would tell the user in chat (those go in your chat reply). Never summarize or list the changed code. Test each body line: "Is this a fact about the code or the change that a maintainer needs in a year?" If not, delete it.
-6. Amend (\`git commit --amend\`) instead of making a new commit if all are true: you made HEAD in this session, HEAD is not pushed, and this change corrects or completes HEAD (same task, a bug in it, a missed file, a test or lint fix for it). Make a new commit only for a new task.
+6. Amend only when the staged change is needed to make HEAD correct: it fixes a defect in that change, adds a file omitted from that change, or adds its required test or lint fix.
 
 Subject prefix (decided only by the user's exact words in this request):
 7. If the user said "commit wip": start the subject with \`wip: \`.

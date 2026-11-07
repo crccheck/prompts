@@ -1,5 +1,33 @@
 import type { ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
 
+const MEMORY_DIR = /\/home\/.*\/memory\//;
+// Shell constructs that write: redirects, tee, and common mutating commands.
+const SHELL_WRITE =
+  />|\b(?:tee|mv|cp|rm|rmdir|touch|mkdir|ln|install|truncate|dd|chmod|chown|rsync)\b|\bsed\b[^;&|\n]*\s-[a-zA-Z]*i|\bgit\s+(?:checkout|restore|apply)\b/;
+
+function writesMemory(toolName: string, input: Record<string, unknown>): boolean {
+  const path = typeof input.path === "string" ? input.path : "";
+  switch (toolName) {
+    case "write":
+    case "ast_edit":
+      return MEMORY_DIR.test(path);
+    case "edit": {
+      // Hashline edits name each file in a `[PATH#TAG]` header.
+      const text = typeof input.input === "string" ? input.input : "";
+      for (const m of text.matchAll(/^\[(.+?)#[0-9A-Fa-f]{4}\]/gm)) {
+        if (MEMORY_DIR.test(m[1] ?? "")) return true;
+      }
+      return MEMORY_DIR.test(path);
+    }
+    case "bash": {
+      const cmd = typeof input.command === "string" ? input.command : "";
+      return MEMORY_DIR.test(cmd) && SHELL_WRITE.test(cmd);
+    }
+    default:
+      return false;
+  }
+}
+
 export default function safety(pi: ExtensionAPI): void {
   // ── Bash safety hooks (ported from PreToolUse) ────────────────────────────
   pi.on("tool_call", async (event) => {
@@ -8,6 +36,14 @@ export default function safety(pi: ExtensionAPI): void {
       return {
         block: true,
         reason: 'Do not mention "Agent-Usage".',
+      };
+    }
+
+    if (writesMemory(event.toolName, event.input ?? {})) {
+      return {
+        block: true,
+        reason:
+          "Do not write to any /home/*/memory/ folder. Nothing reads these. Fix an actual prompt, you fucking sack of shit.",
       };
     }
 
@@ -44,7 +80,10 @@ export default function safety(pi: ExtensionAPI): void {
       };
     }
 
-    if (/\bgit\s+commit\b[^;&|\n]*\s-[a-zA-Z]*m\b[^;&|\n]*\s-[a-zA-Z]*m\b/.test(cmd)) {
+    // Quoted text is blanked first, so `;`, `&` or `|` inside a message cannot hide a second `-m`.
+    const unquoted = cmd.replace(/"(?:\\.|[^"\\])*"|'[^']*'/g, '""');
+    const commitArgs = /\bgit\s+commit\b[^;&|\n]*/.exec(unquoted)?.[0] ?? "";
+    if ((commitArgs.match(/\s-[a-zA-Z]*m\b/g) ?? []).length > 1) {
       return {
         block: true,
         reason:
