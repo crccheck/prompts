@@ -2,10 +2,11 @@ help: ## Shows this help
 	@echo "$$(grep -h '#\{2\}' $(MAKEFILE_LIST) | sed 's/: #\{2\} /	/' | column -t -s '	')"
 
 install: ## Install prompts
-	ln -s ~/Sync/prompts/AGENTS.md ~/.omp/agent/AGENTS.md
-	ln -s ~/Sync/prompts/commands ~/.omp/agent/commands
-	ln -s ~/Sync/prompts/omp/agents/hooks ~/.omp/agent/hooks
-	ln -s ~/Sync/prompts/omp/agents/rules ~/.omp/agent/rules
+	ln -sfn ~/Sync/prompts/AGENTS.md ~/.omp/agent/AGENTS.md
+	ln -sfn ~/Sync/prompts/commands ~/.omp/agent/commands
+	ln -sfn ~/Sync/prompts/omp/agents/hooks ~/.omp/agent/hooks
+	ln -sfn ~/Sync/prompts/omp/agents/rules ~/.omp/agent/rules
+	ln -sfn ~/Sync/prompts/omp/agents/agents ~/.omp/agent/agents
 
 update-user-metrics: ## Re-vendor omp/agents/hooks/lib/user-metrics.ts from @oh-my-pi/omp-stats
 	rm -f omp/agents/hooks/lib/user-metrics.ts
