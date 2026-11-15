@@ -16,6 +16,8 @@ Compare each finding against the existing review comments. Drop a finding if an 
 
 ## Code review
 
+Review the change systematically. Examine each changed line in its surrounding code and compare it with the existing implementation and repository conventions. Verify your conclusions against the code before reporting them.
+
 1. Correctness bugs
 2. Deploy risk — what could break if this ships?
 3. Is this easy to delete? (Not revert — assume it is deep in commit history and revert is not possible)
