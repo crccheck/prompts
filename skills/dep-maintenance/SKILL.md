@@ -1,13 +1,13 @@
 ---
-name: monthly-maintenance
-description: personal monthly maintenance
+name: dep-maintenance
+description: personal periodic dependency maintenance
 ---
 
 # Monthly Maintenance
 
 Audit and update pinned tool versions in a personal project: pre-commit hooks,
 GitHub Actions, Python version, Dockerfile base image, compiled
-requirements / `uv.lock`, and npm dependencies.
+requirements / `uv.lock`, npm dependencies, and Cargo dependencies.
 
 ## Workflow
 
@@ -35,6 +35,8 @@ Read the project's config files and note what's pinned and where:
 - Dockerfile base image: `Dockerfile` — `FROM` lines
 - Compiled requirements: `uv.lock`, `requirements*.txt`
 - npm dependencies: `package.json` — version ranges; check if `package-lock.json` is tracked or gitignored
+- Cargo dependencies: `Cargo.toml` in the root and each workspace member; `Cargo.lock`
+- Local-only hooks (`repo: local`) have no `rev:`; nothing to bump
 
 ### 3. Check for updates
 
@@ -54,6 +56,11 @@ Read the project's config files and note what's pinned and where:
   to see current/wanted/latest for each dependency. `wanted` updates are
   in-range and handled by `npm update`; `latest` versions past `wanted` need
   a manual `package.json` range bump (treat like a series boundary crossing).
+- **Cargo dependencies**: if the project has a `Cargo.toml`, run
+  `cargo update --dry-run`. In-range updates are listed as `Updating`;
+  crates marked `(available: vX)` are past their range and need a manual
+  `Cargo.toml` bump. Also check https://blog.rust-lang.org/ for a new stable
+  Rust release and read its breaking changes against the repo's edition.
 
 ### 4. Report findings
 
@@ -121,7 +128,34 @@ fails, revert the offending package(s) and leave them for a dedicated PR.
 git commit -am 'npm update'
 ```
 
-### 8. Open a draft PR
+### 8. Upgrade Cargo dependencies
+
+If the project has a `Cargo.toml`:
+
+```bash
+cargo update
+```
+
+For any dependency reported as `(available: vX)` after the update, bump the
+range in `Cargo.toml` by hand (major boundary), then run
+`cargo update <crate>`.
+
+Run `cargo clippy --workspace --all-targets` and `cargo test --workspace`
+immediately — do not ask first. If anything fails, revert the offending
+crate(s) and leave them for a dedicated PR. Tests cannot prove GUI or media
+behavior (e.g. `libmpv2` playback); say so in the PR body.
+
+Commit the lockfile update and each major bump separately:
+
+```bash
+git commit -m 'cargo update' Cargo.lock
+```
+
+```bash
+git commit -m 'chore: bump <crate> to <major>' Cargo.toml Cargo.lock
+```
+
+### 9. Open a draft PR
 
 Push the branch first, then create the PR:
 
