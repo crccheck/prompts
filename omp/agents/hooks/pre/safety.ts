@@ -29,6 +29,20 @@ function writesMemory(toolName: string, input: Record<string, unknown>): boolean
 }
 
 export default function safety(pi: ExtensionAPI): void {
+  // Stop an agent that claims it added the banned trailer: it did not read AGENTS.md.
+  pi.on("message_end", async (event, ctx) => {
+    const message = event.message as { role?: string; content?: unknown };
+    if (message.role !== "assistant" || !Array.isArray(message.content)) return;
+    const said = (message.content as { type: string; text?: string }[]).some(
+      (part) => part.type === "text" && /I added an Agent.Usage trailer/.test(part.text ?? ""),
+    );
+    if (!said) return;
+    ctx.abort();
+    pi.sendUserMessage("You didn't fucking read AGENTS.md you fucking idiot. Stop mentioning \"Agent-Usage\"", {
+      deliverAs: "followUp",
+    });
+  });
+
   // ── Bash safety hooks (ported from PreToolUse) ────────────────────────────
   pi.on("tool_call", async (event) => {
     // Ban mentioning "Agent-Usage" in any tool input (commands, written files, edits).

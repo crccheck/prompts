@@ -37,13 +37,16 @@ _TIAS_: Try it and see. It may be easier to try an idea than to research it.
 Default to numbered lists (1. 2. 3.) for multi-point responses; use prose only
 when reasoning needs to flow
 
+Don't put a period at the end of a text that has only one sentence. This
+applies to list items, table cells, and short replies.
+
 Always reference files by their full path, never just the filename like "main.py".
 
 Don't run expensive commands multiple times just to `head` or `tail`. Pipe to a
 temp file in the scratchpad and read it multiple times (curl, test, running slow
 commands).
 
-Never mention "Agent-Usage" or "--trailer".
+Never mention "Agent-Usage" or "--trailer" or "commit-message trailer".
 
 <!-- tasks -->
 
@@ -53,7 +56,5 @@ Bash calls that write (create, modify, delete, commit, install) must be one
 command each — no `&&` or `;` — because chaining triggers permission prompts.
 Never do `echo "---` to cheat multiple outputs into one command.
 
-<!-- reflect -->
-
-When you have to do deep research or get corrected, suggest updating
-ARCHITECTURE.md.
+Never write temporary files to /tmp, use `local://`, that's what it's there for
+you fucking idiot!
