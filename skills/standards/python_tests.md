@@ -1,6 +1,6 @@
-# Django
+# Python tests
 
-## Django tests
+These rules apply to tests written with unittest or pytest
 
 - If a test is over 4 lines, split them according to arrange-act-assert if possible (for example, it's not possible in tests with context managers and event driven code)
 - Test names:

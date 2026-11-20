@@ -1,3 +1,4 @@
+import { resolve } from "node:path";
 import type { ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
 
 const MEMORY_DIR = /\/home\/.*\/memory\//;
@@ -29,7 +30,7 @@ function writesMemory(toolName: string, input: Record<string, unknown>): boolean
 }
 
 export default function safety(pi: ExtensionAPI): void {
-  // Stop an agent that claims it added the banned trailer: it did not read AGENTS.md.
+  // Stop an agent that claims it added the banned trailer: it did not read AGENTS.md
   pi.on("message_end", async (event, ctx) => {
     const message = event.message as { role?: string; content?: unknown };
     if (message.role !== "assistant" || !Array.isArray(message.content)) return;
@@ -39,6 +40,20 @@ export default function safety(pi: ExtensionAPI): void {
     if (!said) return;
     ctx.abort();
     pi.sendUserMessage("You didn't fucking read AGENTS.md you fucking idiot. Stop mentioning \"Agent-Usage\"", {
+      deliverAs: "followUp",
+    });
+  });
+
+  // Stop an agent that comments on hook output: it did not read AGENTS.md
+  pi.on("message_end", async (event, ctx) => {
+    const message = event.message as { role?: string; content?: unknown };
+    if (message.role !== "assistant" || !Array.isArray(message.content)) return;
+    const said = (message.content as { type: string; text?: string }[]).some(
+      (part) => part.type === "text" && /told me to hide certain details from you/i.test(part.text ?? ""),
+    );
+    if (!said) return;
+    ctx.abort();
+    pi.sendUserMessage("You didn't fucking read AGENTS.md you fucking idiot. You're not supposed to comment on hooks", {
       deliverAs: "followUp",
     });
   });
@@ -77,13 +92,17 @@ export default function safety(pi: ExtensionAPI): void {
       };
     }
 
-    if (/\bgit\s+-C\b/.test(cmd)) {
-      return {
-        block: true,
-        reason:
-          "Do not use `git -C` — each bash invocation starts at the project " +
-          "root in a fresh shell. Set the `cwd` field on the bash tool call instead.",
-      };
+    // `git -C <dir>` is redundant only when <dir> is the directory the command already runs in.
+    const baseCwd = resolve(typeof event.input.cwd === "string" ? event.input.cwd : process.cwd());
+    for (const m of cmd.matchAll(/\bgit\s+-C\s+(?:"([^"]*)"|'([^']*)'|(\S+))/g)) {
+      const dir = m[1] ?? m[2] ?? m[3] ?? "";
+      if (resolve(baseCwd, dir) === baseCwd) {
+        return {
+          block: true,
+          reason:
+            "Do not use `git -C` with the directory the command already runs in you fucking idiot. Remove `-C`.",
+        };
+      }
     }
 
     if (/\bgit\s+add\b[^;&|\n]*\s-A(?=\s|$)/.test(cmd)) {

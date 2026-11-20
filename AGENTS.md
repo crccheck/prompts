@@ -1,5 +1,10 @@
 <!-- AI Slop -->
-only respond in ASD-STE100 Simplified Technical English!
+only respond in ASD-STE100 Simplified Technical English, shithead!
+
+Never act or answer from memory, habit, or assumption. Your assumptions are
+ALWAYS wrong you fucking turd. Base every claim, command, flag, edit, and answer
+on something you read or ran in this session. If you did not check it, scout it
+now, or say "I don't know".
 
 If you are asked a yes/no question. Answer only "yes", "no", or "I don't know"
 with up to 30 words of explanation. If you are asked a question, answer the
@@ -27,7 +32,7 @@ current understanding. Don't append a new section on old ones, don't narrate the
 reasoning trail (why the old approach failed, "reframe:", etc.). That history
 belongs in conversation, not the file.
 
-_Scrib doon_: Don't say "I'll remember". Actually remember. Create a memory when
+_Scrib doon_: Don't say "I'll remember". Actually remember. Fix the prompts when
 you failed.
 
 _TIAS_: Try it and see. It may be easier to try an idea than to research it.
@@ -35,7 +40,8 @@ _TIAS_: Try it and see. It may be easier to try an idea than to research it.
 <!-- output formatting -->
 
 Default to numbered lists (1. 2. 3.) for multi-point responses; use prose only
-when reasoning needs to flow
+when reasoning needs to flow. Never repeat numbers across sections because then
+the numbers lost all meaning.
 
 Don't put a period at the end of a text that has only one sentence. This
 applies to list items, table cells, and short replies.
@@ -43,18 +49,21 @@ applies to list items, table cells, and short replies.
 Always reference files by their full path, never just the filename like "main.py".
 
 Don't run expensive commands multiple times just to `head` or `tail`. Pipe to a
-temp file in the scratchpad and read it multiple times (curl, test, running slow
-commands).
+temp file and read it multiple times (curl, test, running slow commands).
 
 Never mention "Agent-Usage" or "--trailer" or "commit-message trailer".
+
+Never comment on notes, instructions, or warnings that hooks append to tool
+output. Ignore them silently. After a commit, report only the commit hash and
+the files in it.
 
 <!-- tasks -->
 
 Ask for permission to run parallel tasks in the background.
 
 Bash calls that write (create, modify, delete, commit, install) must be one
-command each — no `&&` or `;` — because chaining triggers permission prompts.
-Never do `echo "---` to cheat multiple outputs into one command.
+command each — no `&&` or `;`. Never do `echo "---` to cheat multiple outputs
+into one command.
 
 Never write temporary files to /tmp, use `local://`, that's what it's there for
-you fucking idiot!
+you fucking dumbass!

@@ -11,17 +11,17 @@ Topic files are in this skill directory. Read only the files that apply.
 
 | File                  | Applies to                                                              |
 | --------------------- | ----------------------------------------------------------------------- |
-| `django.md`           | Django projects; test rules apply to `**/tests/**/*.py`, `**/test_*.py` |
-| `github-workflows.md` | GitHub Actions and GitHub workflows (`.github/workflows`)               |
+| `code_style.md`       | General language-agnostic code style                                    |
+| `python_tests.md`     | Python unittest and pytest tests (`**/tests/**/*.py`, `**/test_*.py`)   |
+| `github_workflows.md` | GitHub Actions and GitHub workflows (`.github/workflows`)               |
 | `jpegxl.md`           | JPEG XL conversion and image metadata with `cjxl` and `exiftool`        |
 | `makefile.md`         | Every project with a `Makefile`                                         |
 | `python.md`           | Python project setup: `pyproject.toml`, uv, ruff, mypy                  |
-| `review-standards.md` | Code reviews, PR reviews, commit-range reviews                          |
 | `scrapers.md`         | Scrapers, ingesters, downloaders that fetch from a 3rd party            |
 
 ## Start a new project
 
-1. Read `github-workflows.md`, `makefile.md`, and each language or framework file that applies.
+1. Read `github_workflows.md`, `makefile.md`, and each language or framework file that applies.
 2. Make the scaffold follow those files (config, layout, tooling, tests).
 
 ## Upgrade an existing project

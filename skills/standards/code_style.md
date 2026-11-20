@@ -1,4 +1,4 @@
-# Code review styles
+# Code style
 
 - Avoid comments. Write self-documenting code instead. Comments are only for antipatterns
 - Use modern syntax for new code instead of matching existing style except when
