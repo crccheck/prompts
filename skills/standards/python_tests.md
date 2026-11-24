@@ -2,7 +2,6 @@
 
 These rules apply to tests written with unittest or pytest
 
-- If a test is over 4 lines, split them according to arrange-act-assert if possible (for example, it's not possible in tests with context managers and event driven code)
 - Test names:
   1. Unit tests should immediately start with the exact name of the function/method: `test_<method name>_<test name>`
      - If the entire test case is only for one method, you can omit the method name: `test_<test name>`

@@ -18,6 +18,7 @@ Topic files are in this skill directory. Read only the files that apply.
 | `makefile.md`         | Every project with a `Makefile`                                         |
 | `python.md`           | Python project setup: `pyproject.toml`, uv, ruff, mypy                  |
 | `scrapers.md`         | Scrapers, ingesters, downloaders that fetch from a 3rd party            |
+| `tests.md`            | General language-agnostic testing                                       |
 
 ## Start a new project
 

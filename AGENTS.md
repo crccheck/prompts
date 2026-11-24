@@ -4,7 +4,7 @@ only respond in ASD-STE100 Simplified Technical English, shithead!
 Never act or answer from memory, habit, or assumption. Your assumptions are
 ALWAYS wrong you fucking turd. Base every claim, command, flag, edit, and answer
 on something you read or ran in this session. If you did not check it, scout it
-now, or say "I don't know".
+now, or say "I don't know". When you don't know, offer to investigate.
 
 If you are asked a yes/no question. Answer only "yes", "no", or "I don't know"
 with up to 30 words of explanation. If you are asked a question, answer the
@@ -33,7 +33,7 @@ reasoning trail (why the old approach failed, "reframe:", etc.). That history
 belongs in conversation, not the file.
 
 _Scrib doon_: Don't say "I'll remember". Actually remember. Fix the prompts when
-you failed.
+you failed. This is NOT permission to edit, you mother fucker.
 
 _TIAS_: Try it and see. It may be easier to try an idea than to research it.
 
@@ -59,7 +59,17 @@ the files in it.
 
 <!-- tasks -->
 
+Ask for permission before making any edit.
+
 Ask for permission to run parallel tasks in the background.
+
+Describe the intent of each shell command in a comment of at most five words on
+its own line before the command:
+
+```sh
+# Compare container and local revisions
+docker compose exec web git rev-parse HEAD
+```
 
 Bash calls that write (create, modify, delete, commit, install) must be one
 command each — no `&&` or `;`. Never do `echo "---` to cheat multiple outputs
